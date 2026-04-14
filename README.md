@@ -13,11 +13,11 @@ Data viz and tables showing estimated change in error rates as a result of remov
 
 All tools used have an MIT License except topojson (ISC License). All are no-cost. 
 
-[TailwindCSS Colors](https://github.com/tailwindlabs/tailwindcss?tab=MIT-1-ov-file#readme)
-[ChartJS](https://github.com/chartjs/Chart.js?tab=MIT-1-ov-file#readme)
-[Charts-Geo](https://github.com/sgratzl/chartjs-chart-geo/blob/main/LICENSE)
-[ChartJS-Plugin-Datalabels](https://github.com/chartjs/chartjs-plugin-datalabels?tab=MIT-1-ov-file#readme)
-[jQuery](https://jquery.org/license)
-[States-10m.json](https://github.com/topojson/us-atlas/tree/master?tab=ISC-1-ov-file)
-[Datatables](http://datatables.net/license)
-[Datatables Fixed-Columns](https://datatables.net/license)
+[TailwindCSS Colors](https://github.com/tailwindlabs/tailwindcss?tab=MIT-1-ov-file#readme)  
+[ChartJS](https://github.com/chartjs/Chart.js?tab=MIT-1-ov-file#readme)  
+[Charts-Geo](https://github.com/sgratzl/chartjs-chart-geo/blob/main/LICENSE)  
+[ChartJS-Plugin-Datalabels](https://github.com/chartjs/chartjs-plugin-datalabels?tab=MIT-1-ov-file#readme)  
+[jQuery](https://jquery.org/license)  
+[States-10m.json](https://github.com/topojson/us-atlas/tree/master?tab=ISC-1-ov-file)   
+[Datatables](http://datatables.net/license)  
+[Datatables Fixed-Columns](https://datatables.net/license)  
