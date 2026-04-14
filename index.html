@@ -15,12 +15,12 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="theme-color" content="#ffffff">
 
-        <script src="/libs/jquery.js"></script>
+        <script src="libs/jquery.js"></script>
 
-        <link href="/datatables/datatables.css" rel="stylesheet">
-        <script src="/datatables/datatables.js"></script>       
-        <script src="/datatables/dataTables.fixedColumns.min.js"></script>       
-        <link href="/datatables/dataTables.fixedColumns.css" rel="stylesheet">
+        <link href="datatables/datatables.css" rel="stylesheet">
+        <script src="datatables/datatables.js"></script>       
+        <script src="datatables/dataTables.fixedColumns.min.js"></script>       
+        <link href="datatables/dataTables.fixedColumns.css" rel="stylesheet">
 
     </head>
     <body class='flex flex-col min-h-screen en-lang'>
@@ -29,10 +29,10 @@
  <main style="padding: 20px;">
     <div>
 
-        <script src="/libs/chart.min.js"></script>
-        <script src="/libs/chartjs-chart-geo.js"></script>
-        <script src="/libs/chartjs-plugin-datalabels.js"></script>
-        <script src="/map.js"></script>
+        <script src="libs/chart.min.js"></script>
+        <script src="libs/chartjs-chart-geo.js"></script>
+        <script src="libs/chartjs-plugin-datalabels.js"></script>
+        <script src="map.js"></script>
 
         <div style="display: flex; margin-bottom: 20px;">
             <div style="width: 25%; padding: 16px; border: 1px solid #90a1b9;">
@@ -65,8 +65,8 @@
 
                     <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 6px; padding-bottom: 6px;">Explanation</h3>
                     <div style="text-align: left; font-size: 0.9rem;">
-                        <div style="font-style: italic">All cost share amounts are hypothetical and based on estimated changes in error rates using public QC data for 2023 and published 2024 error rates (the most recent available for each).</div>
-                        <div style="margin-top: 12px;"><strong>Actual: </strong>Actual FY2024 Error Rate</div>
+                        <div style="font-style: italic">All cost share amounts are hypothetical.</div>
+                        <div style="margin-top: 12px;"><strong>Actual: </strong>Actual FY2023 Error Rate</div>
                         <div style="margin-top: 12px;"><strong>QC Threshold: </strong>Calculated FY2023 Error Rates using QC data using the FY2023 threshold of $54</div>
                         <div style="margin-top: 12px;"><strong>QC Zero: </strong>Calculated FY2023 Error Rates using QC data using an error threshold of $0</div>
                         <div style="margin-top: 12px;"><strong>QC Method Rate Change: </strong>QC Zero - QC Threshold</div>
@@ -97,10 +97,10 @@
     </div>  
 </main>
 
-<script src="/data.js"></script>
+<script src="data.js"></script>
 <script>
     
-    // Setting global alignment to right for cells and headers
+    // Total right alignment for table data and headers
     var td = '<td style="text-align: right;">'
     var th = '<th style="text-align: right;">'
     var table = $('<table id="snap-table">').css('border', '1px solid #90a1b9');
@@ -142,7 +142,7 @@
         };
     }
 
-    // Numbers are rounded to integers per previous request
+    // Number formatting with integer rounding
     function formatNumber(x, divide){
         var val = Math.round(x / divide);
         return val.toLocaleString('en-US');
@@ -189,7 +189,7 @@
 
         var json = data[state];
         
-        // State column now follows the right-align rule
+        // State column included in right-alignment
         var row_data = td + json['State'] + '</td>';
 
         if (!states_added.includes(json['State'])){
@@ -204,6 +204,8 @@
 
             row_data +=  td + formatErrorRate(json['QC Threshold Error Rates']) + '</td>';
             row_data +=  td + formatErrorRate(json['QC Zero Error Rates']) + '</td>';
+            
+            // Keeps percentage change as a precise float for clarity
             row_data +=  td + parseFloat(json['QC Method Rate Change']).toFixed(2) + '%</td>';
 
 
@@ -216,7 +218,7 @@
             table.append('<tr>' + row_data + '</tr>');
             counter++;
 
-            // Data for map remains same
+            // Data mapping for Chart.js
             map_dataH[json['State']] = convertK(json['Households']);
             map_dataB[json['State']] = convertMillions(json['Cost']);
             map_data1[json['State']] = parseFloat(json['Actual Error Rates']);
@@ -249,8 +251,7 @@
       });
 
 
-    
-    // Initialize map
+    // Initialize Map
     map_data = map_dataH;
     initMap(f_before='', f_after='K', t_color='black', c_scale="colorLogarithmic");
       
