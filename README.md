@@ -1,6 +1,6 @@
 # SNAP Error Rates Visualizer
 
-Data viz and tables showing estimated change in error rates as a result of removing the variance threshold. Thanks to Ben Molin for the help designing this. Note: nearly all the code was written by Claude and Gemini. 
+Data viz and tables showing estimated change in error rates as a result of removing the variance threshold. Thanks to Ben Molin for the help designing this and building the visualization. Apart from that and the R script, much of the other code was written by Claude and Gemini. 
 
 ## Sources
 
