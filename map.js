@@ -24,8 +24,8 @@ var nation;
 Chart.register(window.ChartDataLabels);
 
 function initMap(f_before, f_after, t_color, c_scale){
-      // GENERATE MAP
-      fetch('/libs/states-10m.json').then((r) => r.json()).then((us) => {
+      // GENERATE MAP - UPDATED PATH TO RELATIVE
+      fetch('libs/states-10m.json').then((r) => r.json()).then((us) => {
 
         if (c_scale == null){
             c_scale = {
