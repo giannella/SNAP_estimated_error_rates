@@ -1,0 +1,11 @@
+"""
+Beginning in FY2028, the enacted bill requires (1) states with error rates 
+
+equal to or greater than 6% but less than 8% to contribute 5% of SNAP benefit costs,
+
+(2) states with error rates equal to or greater than 8% but less than 10% to contribute 10% of SNAP benefit costs, and 
+
+(3) states with error rates equal to or greater than 10% to contribute 15% of SNAP benefit costs. 
+
+
+"""

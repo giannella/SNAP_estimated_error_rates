@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <title>SNAP Error Rate Visualizer</title>
+        <meta name="description" content="">
+        <meta property="og:title" content="">
+        <meta property="og:description" content="">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta property="og:type"  content="website">
+        <meta name="twitter:card" content="summary">
+
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff">
+
+        <script src="/libs/jquery.js"></script>
+
+        <link href="/datatables/datatables.css" rel="stylesheet">
+        <script src="/datatables/datatables.js"></script>       
+        <script src="/datatables/dataTables.fixedColumns.min.js"></script>       
+        <link href="/datatables/dataTables.fixedColumns.css" rel="stylesheet">
+
+    </head>
+    <body class='flex flex-col min-h-screen en-lang'>
+
+
+ <main style="padding: 20px;">
+    <div>
+
+        <script src="/libs/chart.min.js"></script>
+        <script src="/libs/chartjs-chart-geo.js"></script>
+        <script src="/libs/chartjs-plugin-datalabels.js"></script>
+        <script src="/map.js"></script>
+
+        <div style="display: flex; margin-bottom: 20px;">
+            <div style="width: 25%; padding: 16px; border: 1px solid #90a1b9;">
+                <div style="text-align: center; padding-left: 20px; padding-right: 20px;">
+                    <h2 style="font-weight: bold; margin-bottom: 20px; text-decoration: underline;">2023 SNAP Error Rates</h2>
+                  
+
+                    <h3 style="font-weight: bold; padding-top: 4px; margin-bottom: 12px; padding-bottom: 6px;">Select a Chart</h3>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <button onclick="genMap('H', this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">SNAP Households</button>
+                      <button onclick="genMap('B', this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">SNAP Costs</button>
+
+                      <button onclick="genMap(1, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">Actual Error Rate %</button>
+                      <button onclick="genMap(2, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">Actual Cost Share %</button>
+                      <button onclick="genMap(3, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">Actual Cost Share $</button>
+
+                      <button onclick="genMap(11, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">QC Threshold Error Rate %</button>
+                      <button onclick="genMap(21, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">QC Zero Error Rate %</button>
+                      <button onclick="genMap(31, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">QC Method Rate Change %</button>
+
+
+                      <button onclick="genMap(41, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Error Rate %</button>
+                      <button onclick="genMap(42, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost Share %</button>
+                      <button onclick="genMap(45, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost Share Change %</button>
+                      <button onclick="genMap(43, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost $</button>
+                      <button onclick="genMap(44, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost Change $</button>
+
+                    </div>
+
+
+                    <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 6px; padding-bottom: 6px;">Explanation</h3>
+                    <div style="text-align: left; font-size: 0.9rem;">
+                        <div style="font-style: italic">All cost share amounts are hypothetical and based on estimated changes in error rates using public QC data for 2023 and published 2024 error rates (the most recent available for each).</div>
+                        <div style="margin-top: 12px;"><strong>Actual: </strong>Actual FY2024 Error Rate</div>
+                        <div style="margin-top: 12px;"><strong>QC Threshold: </strong>Calculated FY2023 Error Rates using QC data using the FY2023 threshold of $54</div>
+                        <div style="margin-top: 12px;"><strong>QC Zero: </strong>Calculated FY2023 Error Rates using QC data using an error threshold of $0</div>
+                        <div style="margin-top: 12px;"><strong>QC Method Rate Change: </strong>QC Zero - QC Threshold</div>
+                        <div style="margin-top: 12px;"><strong>New: </strong>Actual + QC Method Rate Change</div>
+                    </div>
+                  
+
+                </div>
+                
+            </div>
+            <div style="width: 75%; background: #ffffff; padding: 16px; border: 1px solid #90a1b9; border-left: none; position: relative;">
+                <div id="map-title" style="text-align: center; font-weight: bold; font-size: 28px; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);">SNAP Households</div>
+                <canvas id="canvas" width="800" height="600"></canvas>
+            </div>
+          </div>
+
+
+        
+        <div id='table-placeholder'></div>
+
+        <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 12px; padding-bottom: 6px;">Data Sources</h3>
+        <a href="https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-fy23-qc-payment-error-rate.pdf" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Payment Error Rate</a>
+        <div style="padding-top: 10px;"></div>
+        <a href="https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap" target="_blank" rel="noopener noreferrer">SNAP FY23 Households / Persons / Costs</a>
+        <div style="padding-top: 10px;"></div>
+        <a href="https://www.fns.usda.gov/snap/qc/database" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Data</a>
+
+    </div>  
+</main>
+
+<script src="/data.js"></script>
+<script>
+    
+    // Setting global alignment to right for cells and headers
+    var td = '<td style="text-align: right;">'
+    var th = '<th style="text-align: right;">'
+    var table = $('<table id="snap-table">').css('border', '1px solid #90a1b9');
+    var counter = 1;
+
+    function formatErrorRate(x){
+        if (x < 6){
+            return '<span style="background-color: #b9f8cf; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        }else if (x < 8){
+            return '<span style="background-color: #fef9c2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        }else if (x < 10){
+            return '<span style="background-color: #ffd6a7; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        } else{
+            return '<span style="background-color: #ffa2a2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        };
+    };
+
+    function formatCostShare(x){
+        if (x < 1){
+            return '<span style="background-color: #b9f8cf; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        }else if (x < 6){
+            return '<span style="background-color: #fef9c2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        }else if (x < 11){
+            return '<span style="background-color: #ffd6a7; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        } else{
+            return '<span style="background-color: #ffa2a2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
+        };
+    };
+
+    function getCostShare(x){
+        if (x < 6){
+            return 0;
+        }else if (x < 8){
+            return 5;
+        }else if (x < 10){
+            return 10;
+        } else{
+            return 15;
+        };
+    }
+
+    // Numbers are rounded to integers per previous request
+    function formatNumber(x, divide){
+        var val = Math.round(x / divide);
+        return val.toLocaleString('en-US');
+    }
+
+    function convertMillions(x){
+        return Math.round(x / 1000000);
+    }
+
+    function convertK(x){
+        return Math.round(x / 1000);
+    }
+
+    function formatDollar(x){
+        if (x == null){
+            return 'No Limit';
+        }else{
+            return '$' + Math.round(x);
+        }
+    }
+
+
+    // Table Header - All columns right-aligned
+    var row_data = th + 'State' + '</th>';
+    row_data +=  th + 'Households (Thousands)' + '</th>';
+    row_data +=  th + 'Benefits $M' + '</th>';
+    row_data +=  th + 'Actual Error Rate' + '</th>';
+    row_data +=  th + 'Actual Cost Share %' + '</th>';
+    row_data +=  th + 'Actual Cost Share $M' + '</th>';
+    row_data +=  th + 'QC Threshold Error Rate' + '</th>';
+    row_data +=  th + 'QC Zero Error Rate' + '</th>';
+    row_data +=  th + 'QC Method Rate Change' + '</th>';
+    row_data +=  th + 'New Error Rate' + '</th>';
+    row_data +=  th + 'New Cost Share' + '</th>';
+    row_data +=  th + 'New Cost Share Change' + '</th>';
+    row_data +=  th + 'New Cost $M' + '</th>';
+    row_data +=  th + 'New Cost Change $M' + '</th>';
+
+    table.append('<thead><tr class="">' + row_data + '</tr></thead><tbody>');
+    
+    var states_added = [];
+
+    for (var state in data) {
+
+        var json = data[state];
+        
+        // State column now follows the right-align rule
+        var row_data = td + json['State'] + '</td>';
+
+        if (!states_added.includes(json['State'])){
+            states_added.push(json['State']);
+
+            row_data +=  td + formatNumber(json['Households'], 1000) + '</td>';
+            row_data +=  td + "$" + formatNumber(json['Cost'], 1000000) + '</td>';
+
+            row_data +=  td + formatErrorRate(json['Actual Error Rates']) + '</td>';
+            row_data +=  td + formatCostShare(json['Actual Cost Share']) + '</td>';
+            row_data +=  td + "$" + formatNumber(json['Actual Cost'], 1000000) + '</td>';
+
+            row_data +=  td + formatErrorRate(json['QC Threshold Error Rates']) + '</td>';
+            row_data +=  td + formatErrorRate(json['QC Zero Error Rates']) + '</td>';
+            row_data +=  td + parseFloat(json['QC Method Rate Change']).toFixed(2) + '%</td>';
+
+
+            row_data +=  td + formatErrorRate(json['New Error Rate']) + '</td>';
+            row_data +=  td + formatCostShare(json['New Cost Share']) + '</td>';
+            row_data +=  td + formatCostShare(json['New Cost Share Change']) + '</td>';
+            row_data +=  td + "$" + formatNumber(json['New Cost'], 1000000) + '</td>';
+            row_data +=  td + "$" + formatNumber(json['New Cost Change'], 1000000) + '</td>';
+
+            table.append('<tr>' + row_data + '</tr>');
+            counter++;
+
+            // Data for map remains same
+            map_dataH[json['State']] = convertK(json['Households']);
+            map_dataB[json['State']] = convertMillions(json['Cost']);
+            map_data1[json['State']] = parseFloat(json['Actual Error Rates']);
+            map_data2[json['State']] = parseFloat(json['Actual Cost Share']);
+            map_data3[json['State']] = convertMillions(json['Actual Cost']);
+            map_data11[json['State']] = parseFloat(json['QC Threshold Error Rates']);
+            map_data21[json['State']] = parseFloat(json['QC Zero Error Rates']);
+            map_data31[json['State']] = parseFloat(json['QC Method Rate Change']);
+            map_data41[json['State']] = parseFloat(json['New Error Rate']);
+            map_data42[json['State']] = parseFloat(json['New Cost Share']);
+            map_data45[json['State']] = parseFloat(json['New Cost Share Change']);
+            map_data43[json['State']] = convertMillions(json['New Cost']);
+            map_data44[json['State']] = convertMillions(json['New Cost Change']);
+        };
+    }
+
+    $('#table-placeholder').append(table);    
+    $('#snap-table').DataTable( {
+        scrollX: false,
+        paging: false,
+        fixedColumns: {
+            left: 1,
+        },
+        oLanguage: {
+            "sSearch": "Search States:",
+        },
+        "columnDefs": [
+            { "targets": [1], "searchable": false }
+        ]
+      });
+
+
+    
+    // Initialize map
+    map_data = map_dataH;
+    initMap(f_before='', f_after='K', t_color='black', c_scale="colorLogarithmic");
+      
+    function genMap(x, btnText){
+        document.getElementById('map-title').innerText = btnText;
+        if (x == 1){
+            map_data = map_data1;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
+        } else if (x == 2){
+            map_data = map_data2;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
+        } else if (x == 3){
+            map_data = map_data3;
+            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
+        }else if (x == "H"){
+            map_data = map_dataH;
+            initMap(f_before='', f_after='K', t_color='black', c_scale="colorLogarithmic");
+        }else if (x == "B"){
+            map_data = map_dataB;
+            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
+        } else if (x == 11){
+            map_data = map_data11;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
+        } else if (x == 21){
+            map_data = map_data21;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
+        } else if (x == 31){
+            map_data = map_data31;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+        } else if (x == 41){
+            map_data = map_data41;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+        } else if (x == 42){
+            map_data = map_data42;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+        } else if (x == 43){
+            map_data = map_data43;
+            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
+        } else if (x == 44){
+            map_data = map_data44;
+            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
+        } else if (x == 45){
+            map_data = map_data45;
+            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+        };
+    };
+
+</script>
+
+</body>
+  
+</html>
+
+<style>
+    * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    .sorting_asc.dtfc-fixed-left {
+        position: relative !important;
+    }
+    .sorting_desc.dtfc-fixed-left {
+        position: relative !important;
+    }
+</style>
