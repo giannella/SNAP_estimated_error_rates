@@ -1,30 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        
         <title>SNAP Error Rate Visualizer</title>
-        <meta name="description" content="">
-        <meta property="og:title" content="">
-        <meta property="og:description" content="">
-
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
-        <meta property="og:type"  content="website">
-        <meta name="twitter:card" content="summary">
-
-        <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="theme-color" content="#ffffff">
-
         <script src="libs/jquery.js"></script>
-
         <link href="datatables/datatables.css" rel="stylesheet">
         <script src="datatables/datatables.js"></script>       
         <script src="datatables/dataTables.fixedColumns.min.js"></script>       
         <link href="datatables/dataTables.fixedColumns.css" rel="stylesheet">
-
     </head>
     <body class='flex flex-col min-h-screen en-lang'>
-
 
 <div style="text-align: center; padding: 10px 0;">
     <img src="BetterGovernmentLab-Banner_Logos_small.png" alt="Better Government Lab Logo" style="max-width: 25%; height: auto;">
@@ -32,7 +18,6 @@
 
  <main style="padding: 20px;">
     <div>
-
         <script src="libs/chart.min.js"></script>
         <script src="libs/chartjs-chart-geo.js"></script>
         <script src="libs/chartjs-plugin-datalabels.js"></script>
@@ -40,74 +25,79 @@
 
         <div style="display: flex; margin-bottom: 20px;">
             <div style="width: 25%; padding: 16px; border: 1px solid #90a1b9;">
-                <div style="text-align: center; padding-left: 20px; padding-right: 20px;">
-                    <h2 style="font-weight: bold; margin-bottom: 20px; text-decoration: underline;">SNAP PER Cost Share Projection: Impact of Removing the QC Tolerance Threshold</h2>
-</h2>
+                <div style="text-align: center;">
+                    <h2 style="font-weight: bold; margin-bottom: 20px; text-decoration: underline; font-size: 1.05rem;">SNAP PER Cost Share Projection: Impact of Removing the QC Tolerance Threshold</h2>
                   
+                    <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                      
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="font-weight: bold; font-size: 0.85rem; color: #444; width: 90px; flex-shrink: 0;">Error Rate %</div>
+                        <div style="display: flex; gap: 4px; flex-grow: 1;">
+                            <button onclick="genMap(1, 'Error Rate under Current Policy')" style="flex: 1; padding: 6px 2px; background: #ffffff; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Current</button>
+                            <button onclick="genMap(41, 'Error Rate under Proposed Policy')" style="flex: 1; padding: 6px 2px; background: #fdf2f2; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Proposed</button>
+                        </div>
+                      </div>
 
-                    <h3 style="font-weight: bold; padding-top: 4px; margin-bottom: 12px; padding-bottom: 6px;">Select a Chart</h3>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                      <button onclick="genMap('H', this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">SNAP Households</button>
-                      <button onclick="genMap('B', this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">SNAP Costs</button>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="font-weight: bold; font-size: 0.85rem; color: #444; width: 90px; flex-shrink: 0;">Cost Share %</div>
+                        <div style="display: flex; gap: 4px; flex-grow: 1;">
+                            <button onclick="genMap(2, 'Cost Share under Current Policy')" style="flex: 1; padding: 6px 2px; background: #ffffff; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Current</button>
+                            <button onclick="genMap(42, 'Cost Share under Proposed Policy')" style="flex: 1; padding: 6px 2px; background: #fdf2f2; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Proposed</button>
+                        </div>
+                      </div>
 
-                      <button onclick="genMap(1, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">Actual Error Rate %</button>
-                      <button onclick="genMap(2, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">Actual Cost Share %</button>
-                      <button onclick="genMap(3, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">Actual Cost Share $</button>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="font-weight: bold; font-size: 0.85rem; color: #444; width: 90px; flex-shrink: 0;">State Cost $</div>
+                        <div style="display: flex; gap: 4px; flex-grow: 1;">
+                            <button onclick="genMap(3, 'State Cost under Current Policy')" style="flex: 1; padding: 6px 2px; background: #ffffff; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Current</button>
+                            <button onclick="genMap(44, 'Additional State Cost under Proposed Policy')" style="flex: 1; padding: 6px 2px; background: #fdf2f2; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Proposed Additional</button>
+                        </div>
+                      </div>
 
-                      <button onclick="genMap(11, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">QC Threshold Error Rate %</button>
-                      <button onclick="genMap(21, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">QC Zero Error Rate %</button>
-                      <button onclick="genMap(31, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">QC Method Rate Change %</button>
-
-
-                      <button onclick="genMap(41, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Error Rate %</button>
-                      <button onclick="genMap(42, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost Share %</button>
-                      <button onclick="genMap(45, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost Share Change %</button>
-                      <button onclick="genMap(43, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost $</button>
-                      <button onclick="genMap(44, this.innerText)" style="margin: 0 8px; padding: 8px 4px; background: #f1f5f9; border: 1px solid #314158; cursor: pointer; border-radius: 6px;">New Cost Change $</button>
+                      <div style="border-top: 1px solid #ddd; padding-top: 10px; display: flex; align-items: center; gap: 8px;">
+                        <div style="font-weight: bold; font-size: 0.85rem; color: #444; width: 90px; flex-shrink: 0;">2024 SNAP</div>
+                        <div style="display: flex; gap: 4px; flex-grow: 1;">
+                            <button onclick="genMap('H', '2024 SNAP Households')" style="flex: 1; padding: 6px 2px; background: #ebf9f1; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Households</button>
+                            <button onclick="genMap('B', '2024 SNAP Benefits')" style="flex: 1; padding: 6px 2px; background: #ebf9f1; border: 1px solid #314158; cursor: pointer; border-radius: 6px; font-size: 0.75rem;">Benefits $</button>
+                        </div>
+                      </div>
 
                     </div>
 
-
-                    <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 6px; padding-bottom: 6px;">Background and Definitions</h3>
-                    <div style="text-align: left; font-size: 0.9rem;">
+                    <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 6px; padding-bottom: 6px; text-align: left;">Background and Definitions</h3>
+                    <div style="text-align: left; font-size: 0.85rem;">
                         <div style="font-style: italic">Congress is considering removing the SNAP QC tolerance threshold, which excludes small errors (currently $58 or less) from a state's payment error rate (PER). Beginning in FY28, states with error rates exceeding 6%, 8%, and 10% will need to cover 5%, 10%, and 15% of benefits issued, respectively. These analyses use the most recent available data (FY23 and FY24) to project the potential impact of removing the tolerance threshold in terms of those cost shares. Base rates are from FY24, which reflect official error numbers, and the estimated change due to removing the threshold is computed using public QC data (FY23). See sources below.</div>
-                        <div style="margin-top: 12px;"><strong>Actual: </strong>Official FY2024 Error Rate</div>
+                        <div style="margin-top: 12px;"><strong>Current Policy: </strong>Official FY2024 Error Rate</div>
                         <div style="margin-top: 12px;"><strong>QC Threshold: </strong>Calculated FY2023 Error Rates using QC data using the FY2023 threshold of $54</div>
                         <div style="margin-top: 12px;"><strong>QC Zero: </strong>Calculated FY2023 Error Rates using QC data using an error threshold of $0</div>
                         <div style="margin-top: 12px;"><strong>QC Method Rate Change: </strong>QC Zero - QC Threshold</div>
-                        <div style="margin-top: 12px;"><strong>New: </strong>Actual + QC Method Rate Change</div>
+                        <div style="margin-top: 12px;"><strong>Proposed Policy: </strong>Current Policy + QC Method Rate Change</div>
                     </div>
-                  
-
                 </div>
-                
             </div>
+            
             <div style="width: 75%; background: #ffffff; padding: 16px; border: 1px solid #90a1b9; border-left: none; position: relative;">
-                <div id="map-title" style="text-align: center; font-weight: bold; font-size: 28px; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);">New Cost Change $</div>
+                <div id="map-title" style="text-align: center; font-weight: bold; font-size: 28px; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);">Additional State Cost under Proposed Policy</div>
                 <canvas id="canvas" width="800" height="600"></canvas>
             </div>
           </div>
-
-
-        
         <div id='table-placeholder'></div>
-
     </div>  
 </main>
 
 <footer style="text-align: center; padding: 20px; font-size: 0.9rem; color: #555;">
-
     <div style="margin-top: 15px;">
         <h3 style="font-weight: bold; margin-bottom: 12px;">
             <a href="https://www.bettergovernmentlab.org/resources/snap-quality-control-error-viewer" target="_blank" rel="noopener noreferrer">Other resources from Better Government Lab about SNAP Payment Error Rates</a>
-            </h3>
+        </h3>
     </div>
     
     <h3 style="font-weight: bold; margin-bottom: 12px;">Data Sources</h3>
-        <a href="https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-fy24QC-PER.pdf" target="_blank" rel="noopener noreferrer">SNAP FY24 Payment Error Rates</a>
+    <a href="https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-fy24QC-PER.pdf" target="_blank" rel="noopener noreferrer">SNAP FY24 Payment Error Rates</a>
     <div style="padding-top: 10px;"></div>
-        <a href="https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap" target="_blank" rel="noopener noreferrer">SNAP FY24 Households / Persons / Costs</a>    <div style="padding-top: 10px;"></div>
-        <a href="https://www.fns.usda.gov/snap/qc/database" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Data</a>
+    <a href="https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap" target="_blank" rel="noopener noreferrer">SNAP FY24 Households / Persons / Costs</a>
+    <div style="padding-top: 10px;"></div>
+    <a href="https://www.fns.usda.gov/snap/qc/database" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Data</a>
 
     <div style="padding-top: 30px; margin-top: 20px; border-top: 1px solid #eee;">
         <a href="https://gufaculty360.georgetown.edu/s/contact/003UH000006T24bYAC/eric-giannella" target="_blank" rel="noopener noreferrer">Eric Giannella</a>, Associate Research Professor, Georgetown University <a href="https://www.bettergovernmentlab.org/" target="_blank" rel="noopener noreferrer">Better Government Lab</a><BR>
@@ -117,126 +107,62 @@
 
 <script src="data.js"></script>
 <script>
-    
-    // Total right alignment for table data and headers
     var td = '<td style="text-align: right;">'
     var th = '<th style="text-align: right;">'
     var table = $('<table id="snap-table">').css('border', '1px solid #90a1b9');
-    var counter = 1;
 
     function formatErrorRate(x){
-        if (x < 6){
-            return '<span style="background-color: #b9f8cf; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        }else if (x < 8){
-            return '<span style="background-color: #fef9c2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        }else if (x < 10){
-            return '<span style="background-color: #ffd6a7; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        } else{
-            return '<span style="background-color: #ffa2a2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        };
+        var color = x < 6 ? '#b9f8cf' : (x < 8 ? '#fef9c2' : (x < 10 ? '#ffd6a7' : '#ffa2a2'));
+        return '<span style="background-color: ' + color + '; padding: 2px 5px; border-radius: 10px;">' + x + '%</span>';
     };
 
     function formatCostShare(x){
-        if (x < 1){
-            return '<span style="background-color: #b9f8cf; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        }else if (x < 6){
-            return '<span style="background-color: #fef9c2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        }else if (x < 11){
-            return '<span style="background-color: #ffd6a7; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        } else{
-            return '<span style="background-color: #ffa2a2; padding: 2px 5px 2px 5px; border-radius: 10px;">' + x + '%</span>';
-        };
+        var color = x < 1 ? '#b9f8cf' : (x < 6 ? '#fef9c2' : (x < 11 ? '#ffd6a7' : '#ffa2a2'));
+        return '<span style="background-color: ' + color + '; padding: 2px 5px; border-radius: 10px;">' + x + '%</span>';
     };
 
-    function getCostShare(x){
-        if (x < 6){
-            return 0;
-        }else if (x < 8){
-            return 5;
-        }else if (x < 10){
-            return 10;
-        } else{
-            return 15;
-        };
-    }
+    function formatNumber(x, divide){ return Math.round(x / divide).toLocaleString('en-US'); }
+    function convertMillions(x){ return Math.round(x / 1000000); }
+    function convertK(x){ return Math.round(x / 1000); }
 
-    // Number formatting with integer rounding
-    function formatNumber(x, divide){
-        var val = Math.round(x / divide);
-        return val.toLocaleString('en-US');
-    }
-
-    function convertMillions(x){
-        return Math.round(x / 1000000);
-    }
-
-    function convertK(x){
-        return Math.round(x / 1000);
-    }
-
-    function formatDollar(x){
-        if (x == null){
-            return 'No Limit';
-        }else{
-            return '$' + Math.round(x);
-        }
-    }
-
-
-    // Table Header - All columns right-aligned
     var row_data = th + 'State' + '</th>';
-    row_data +=  th + 'Households (Thousands)' + '</th>';
+    row_data +=  th + 'Households (K)' + '</th>';
     row_data +=  th + 'Benefits $M' + '</th>';
-    row_data +=  th + 'Actual Error Rate' + '</th>';
-    row_data +=  th + 'Actual Cost Share %' + '</th>';
-    row_data +=  th + 'Actual Cost Share $M' + '</th>';
+    row_data +=  th + 'Error Rate Current Policy' + '</th>';
+    row_data +=  th + 'Cost Share % Current Policy' + '</th>';
+    row_data +=  th + 'Cost Share $M Current Policy' + '</th>';
     row_data +=  th + 'QC Threshold Error Rate' + '</th>';
     row_data +=  th + 'QC Zero Error Rate' + '</th>';
     row_data +=  th + 'QC Method Rate Change' + '</th>';
-    row_data +=  th + 'New Error Rate' + '</th>';
-    row_data +=  th + 'New Cost Share' + '</th>';
-    row_data +=  th + 'New Cost Share Change' + '</th>';
-    row_data +=  th + 'New Cost $M' + '</th>';
-    row_data +=  th + 'New Cost Change $M' + '</th>';
+    row_data +=  th + 'Error Rate Proposed Policy' + '</th>';
+    row_data +=  th + 'Cost Share % Proposed Policy' + '</th>';
+    row_data +=  th + 'Cost Share Change Proposed Policy' + '</th>';
+    row_data +=  th + 'Proposed Policy Cost $M' + '</th>';
+    row_data +=  th + 'State Cost $ Proposed Policy' + '</th>';
 
-    table.append('<thead><tr class="">' + row_data + '</tr></thead><tbody>');
-    
+    table.append('<thead><tr>' + row_data + '</tr></thead><tbody>');
     var states_added = [];
 
     for (var state in data) {
-
         var json = data[state];
-        
-        // State column included in right-alignment
         var row_data = td + json['State'] + '</td>';
-
         if (!states_added.includes(json['State'])){
             states_added.push(json['State']);
-
             row_data +=  td + formatNumber(json['Households'], 1000) + '</td>';
             row_data +=  td + "$" + formatNumber(json['Cost'], 1000000) + '</td>';
-
             row_data +=  td + formatErrorRate(json['Actual Error Rates']) + '</td>';
             row_data +=  td + formatCostShare(json['Actual Cost Share']) + '</td>';
             row_data +=  td + "$" + formatNumber(json['Actual Cost'], 1000000) + '</td>';
-
             row_data +=  td + formatErrorRate(json['QC Threshold Error Rates']) + '</td>';
             row_data +=  td + formatErrorRate(json['QC Zero Error Rates']) + '</td>';
-            
-            // Keeps percentage change as a precise float for clarity
             row_data +=  td + parseFloat(json['QC Method Rate Change']).toFixed(2) + '%</td>';
-
-
             row_data +=  td + formatErrorRate(json['New Error Rate']) + '</td>';
             row_data +=  td + formatCostShare(json['New Cost Share']) + '</td>';
             row_data +=  td + formatCostShare(json['New Cost Share Change']) + '</td>';
             row_data +=  td + "$" + formatNumber(json['New Cost'], 1000000) + '</td>';
             row_data +=  td + "$" + formatNumber(json['New Cost Change'], 1000000) + '</td>';
-
             table.append('<tr>' + row_data + '</tr>');
-            counter++;
 
-            // Data mapping for Chart.js
             map_dataH[json['State']] = convertK(json['Households']);
             map_dataB[json['State']] = convertMillions(json['Cost']);
             map_data1[json['State']] = parseFloat(json['Actual Error Rates']);
@@ -250,82 +176,50 @@
             map_data45[json['State']] = parseFloat(json['New Cost Share Change']);
             map_data43[json['State']] = convertMillions(json['New Cost']);
             map_data44[json['State']] = convertMillions(json['New Cost Change']);
-        };
+        }
     }
 
     $('#table-placeholder').append(table);    
-    $('#snap-table').DataTable( {
-        scrollX: false,
-        paging: false,
-        searching: false, // SEARCH BOX REMOVED
-        fixedColumns: {
-            left: 1,
-        }
-      });
+    $('#snap-table').DataTable({ scrollX: false, paging: false, searching: false, fixedColumns: { left: 1 } });
 
-
-    // DEFAULT MAP INITIALIZATION
+    // DEFAULT VIEW
     map_data = map_data44;
-    initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
+    initMap('$', 'M', 'black', 'colorLogarithmic');
       
     function genMap(x, btnText){
         document.getElementById('map-title').innerText = btnText;
         if (x == 1){
             map_data = map_data1;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
+            // SCALE ENFORCED: 0 to 30
+            initMap('', '%', 'black', {type: 'colorLinear', min: 0, max: 30});
         } else if (x == 2){
             map_data = map_data2;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
+            initMap('', '%', 'black', 'colorLogarithmic');
         } else if (x == 3){
             map_data = map_data3;
-            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
-        }else if (x == "H"){
+            initMap('$', 'M', 'black', 'colorLogarithmic');
+        } else if (x == "H"){
             map_data = map_dataH;
-            initMap(f_before='', f_after='K', t_color='black', c_scale="colorLogarithmic");
-        }else if (x == "B"){
+            initMap('', 'K', 'black', 'colorLogarithmic');
+        } else if (x == "B"){
             map_data = map_dataB;
-            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
-        } else if (x == 11){
-            map_data = map_data11;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
-        } else if (x == 21){
-            map_data = map_data21;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="logarithmic");
-        } else if (x == 31){
-            map_data = map_data31;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+            initMap('$', 'M', 'black', 'colorLogarithmic');
         } else if (x == 41){
             map_data = map_data41;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+            // SCALE ENFORCED: 0 to 30
+            initMap('', '%', 'black', {type: 'colorLinear', min: 0, max: 30});
         } else if (x == 42){
             map_data = map_data42;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
-        } else if (x == 43){
-            map_data = map_data43;
-            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
+            initMap('', '%', 'black', 'colorLogarithmic');
         } else if (x == 44){
             map_data = map_data44;
-            initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
-        } else if (x == 45){
-            map_data = map_data45;
-            initMap(f_before='', f_after='%', t_color='black', c_scale="colorLogarithmic");
+            initMap('$', 'M', 'black', 'colorLogarithmic');
         };
     };
-
 </script>
-
 </body>
-  
-</html>
-
 <style>
-    * {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    }
-    .sorting_asc.dtfc-fixed-left {
-        position: relative !important;
-    }
-    .sorting_desc.dtfc-fixed-left {
-        position: relative !important;
-    }
+    * { font-family: system-ui, -apple-system, sans-serif; }
+    .sorting_asc.dtfc-fixed-left, .sorting_desc.dtfc-fixed-left { position: relative !important; }
 </style>
+</html>
