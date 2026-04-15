@@ -5,9 +5,9 @@ Data viz and tables showing estimated change in error rates as a result of remov
 ## Sources
 
 [2024 Error Rates](https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-fy24QC-PER.pdf)
-[Dec 2024 Households](https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-households-3.pdf)
-[Dec 2024 Benefits](https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-benefits-3.pdf)
 [Cost Share](https://www.congress.gov/crs-product/R48552)
+[2024 Households, Persons, Benefits](https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap)
+[2023 QC Data for rate changes](https://www.fns.usda.gov/snap/qc/database)
 
 ## Licenses
 
