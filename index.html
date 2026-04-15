@@ -26,6 +26,10 @@
     <body class='flex flex-col min-h-screen en-lang'>
 
 
+<div style="text-align: center; padding: 10px 0;">
+    <img src="BetterGovernmentLab-Banner_Logos_small.png" alt="Better Government Lab Logo" style="max-width: 25%; height: auto;">
+</div>
+
  <main style="padding: 20px;">
     <div>
 
@@ -37,7 +41,8 @@
         <div style="display: flex; margin-bottom: 20px;">
             <div style="width: 25%; padding: 16px; border: 1px solid #90a1b9;">
                 <div style="text-align: center; padding-left: 20px; padding-right: 20px;">
-                    <h2 style="font-weight: bold; margin-bottom: 20px; text-decoration: underline;">SNAP Error Rates</h2>
+                    <h2 style="font-weight: bold; margin-bottom: 20px; text-decoration: underline;">SNAP PER Cost Share Projection: Impact of Removing the QC Tolerance Threshold</h2>
+</h2>
                   
 
                     <h3 style="font-weight: bold; padding-top: 4px; margin-bottom: 12px; padding-bottom: 6px;">Select a Chart</h3>
@@ -63,9 +68,9 @@
                     </div>
 
 
-                    <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 6px; padding-bottom: 6px;">Explanation</h3>
+                    <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 6px; padding-bottom: 6px;">Background and Definitions</h3>
                     <div style="text-align: left; font-size: 0.9rem;">
-                        <div style="font-style: italic">All cost share amounts are hypothetical and based on estimated changes in error rates using public QC data for 2023 and published 2024 error rates (the most recent available for each).</div>
+                        <div style="font-style: italic">Congress is considering removing the SNAP QC tolerance threshold, which excludes small errors (currently $58 or less) from a state's payment error rate (PER). Beginning in FY28, states with error rates exceeding 6%, 8%, and 10% will need to cover 5%, 10%, and 15% of benefits issued, respectively. These analyses use the most recent available data (FY23 and FY24) to project the potential impact of removing the tolerance threshold in terms of those cost shares. Base rates are from FY24, which reflect official error numbers, and the estimated change due to removing the threshold is computed using public QC data (FY23). See sources below.</div>
                         <div style="margin-top: 12px;"><strong>Actual: </strong>Official FY2024 Error Rate</div>
                         <div style="margin-top: 12px;"><strong>QC Threshold: </strong>Calculated FY2023 Error Rates using QC data using the FY2023 threshold of $54</div>
                         <div style="margin-top: 12px;"><strong>QC Zero: </strong>Calculated FY2023 Error Rates using QC data using an error threshold of $0</div>
@@ -78,7 +83,7 @@
                 
             </div>
             <div style="width: 75%; background: #ffffff; padding: 16px; border: 1px solid #90a1b9; border-left: none; position: relative;">
-                <div id="map-title" style="text-align: center; font-weight: bold; font-size: 28px; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);">SNAP Households</div>
+                <div id="map-title" style="text-align: center; font-weight: bold; font-size: 28px; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);">New Cost Change $</div>
                 <canvas id="canvas" width="800" height="600"></canvas>
             </div>
           </div>
@@ -87,15 +92,25 @@
         
         <div id='table-placeholder'></div>
 
-        <h3 style="font-weight: bold; padding-top: 20px; margin-bottom: 12px; padding-bottom: 6px;">Data Sources</h3>
-        <a href="https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-fy24QC-PER.pdf" target="_blank" rel="noopener noreferrer">SNAP FY24 QC Payment Error Rate</a>
-        <div style="padding-top: 10px;"></div>
-        <a href="https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap" target="_blank" rel="noopener noreferrer">SNAP FY24 Households / Persons / Costs</a>
-        <div style="padding-top: 10px;"></div>
-        <a href="https://www.fns.usda.gov/snap/qc/database" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Data</a>
-
     </div>  
 </main>
+
+<footer style="text-align: center; padding: 20px; font-size: 0.9rem; color: #555;">
+    <h3 style="font-weight: bold; margin-bottom: 12px;">Data Sources</h3>
+    <a href="https://fns-prod.azureedge.us/sites/default/files/resource-files/snap-fy23-qc-payment-error-rate.pdf" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Payment Error Rate</a>
+    <div style="padding-top: 10px;"></div>
+    <a href="https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap" target="_blank" rel="noopener noreferrer">SNAP FY23 Households / Persons / Costs</a>
+    <div style="padding-top: 10px;"></div>
+    <a href="https://www.fns.usda.gov/snap/qc/database" target="_blank" rel="noopener noreferrer">SNAP FY23 QC Data</a>
+
+    <div style="padding-top: 30px; margin-top: 20px; border-top: 1px solid #eee;">
+        <a href="https://gufaculty360.georgetown.edu/s/contact/003UH000006T24bYAC/eric-giannella" target="_blank" rel="noopener noreferrer">Eric Giannella</a>, Associate Research Professor, Georgetown University <a href="https://www.bettergovernmentlab.org/" target="_blank" rel="noopener noreferrer">Better Government Lab</a>
+    </div>
+
+    <div style="margin-top: 15px;">
+        <a href="https://www.bettergovernmentlab.org/resources/snap-quality-control-error-viewer" target="_blank" rel="noopener noreferrer">Other resources from Better Government Lab about SNAP Payment Error Rates</a>
+    </div>
+</footer>
 
 <script src="data.js"></script>
 <script>
@@ -239,21 +254,16 @@
     $('#snap-table').DataTable( {
         scrollX: false,
         paging: false,
+        searching: false, // SEARCH BOX REMOVED
         fixedColumns: {
             left: 1,
-        },
-        oLanguage: {
-            "sSearch": "Search States:",
-        },
-        "columnDefs": [
-            { "targets": [1], "searchable": false }
-        ]
+        }
       });
 
 
-    // Initialize Map
-    map_data = map_dataH;
-    initMap(f_before='', f_after='K', t_color='black', c_scale="colorLogarithmic");
+    // DEFAULT MAP INITIALIZATION
+    map_data = map_data44;
+    initMap(f_before='$', f_after='M', t_color='black', c_scale="colorLogarithmic");
       
     function genMap(x, btnText){
         document.getElementById('map-title').innerText = btnText;
@@ -309,7 +319,10 @@
     * {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
-    .dtfc-fixed-left {
+    .sorting_asc.dtfc-fixed-left {
+        position: relative !important;
+    }
+    .sorting_desc.dtfc-fixed-left {
         position: relative !important;
     }
 </style>
