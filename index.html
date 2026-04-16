@@ -9,6 +9,8 @@
         <script src="datatables/datatables.js"></script>       
         <script src="datatables/dataTables.fixedColumns.min.js"></script>       
         <link href="datatables/dataTables.fixedColumns.css" rel="stylesheet">
+        <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+        <link href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css" rel="stylesheet">
     </head>
     <body class='flex flex-col min-h-screen en-lang'>
 
@@ -108,7 +110,9 @@
 <script src="data.js"></script>
 <script>
     var td = '<td style="text-align: right;">'
+    var tdLeft = '<td style="text-align: left;">'
     var th = '<th style="text-align: right;">'
+    var thLeft = '<th style="text-align: left;">'
     var table = $('<table id="snap-table">').css('border', '1px solid #90a1b9');
 
     function formatErrorRate(x){
@@ -121,46 +125,55 @@
         return '<span style="background-color: ' + color + '; padding: 2px 5px; border-radius: 10px;">' + x + '%</span>';
     };
 
+    function formatEstChange(x){
+        var v = parseFloat(x);
+        var color = v < 1 ? '#b9f8cf' : (v < 1.5 ? '#fef9c2' : (v < 2 ? '#ffd6a7' : '#ffa2a2'));
+        return '<span style="background-color: ' + color + '; padding: 2px 5px; border-radius: 10px;">' + v.toFixed(2) + '%</span>';
+    };
+
     function formatNumber(x, divide){ return Math.round(x / divide).toLocaleString('en-US'); }
     function convertMillions(x){ return Math.round(x / 1000000); }
     function convertK(x){ return Math.round(x / 1000); }
 
-    var row_data = th + 'State' + '</th>';
-    row_data +=  th + 'Households (K)' + '</th>';
-    row_data +=  th + 'Benefits $M' + '</th>';
-    row_data +=  th + 'Error Rate Current Policy' + '</th>';
-    row_data +=  th + 'Cost Share % Current Policy' + '</th>';
-    row_data +=  th + 'Cost Share $M Current Policy' + '</th>';
-    row_data +=  th + 'QC Threshold Error Rate' + '</th>';
-    row_data +=  th + 'QC Zero Error Rate' + '</th>';
-    row_data +=  th + 'QC Method Rate Change' + '</th>';
-    row_data +=  th + 'Error Rate Proposed Policy' + '</th>';
-    row_data +=  th + 'Cost Share % Proposed Policy' + '</th>';
-    row_data +=  th + 'Cost Share Change Proposed Policy' + '</th>';
-    row_data +=  th + 'Proposed Policy Cost $M' + '</th>';
-    row_data +=  th + 'State Cost $ Proposed Policy' + '</th>';
+    // Two-row header: row 1 has group spans, row 2 has sub-columns
+    var groupRow = thLeft + 'State' + '</th>';
+    groupRow += '<th colspan="3" style="text-align: center; border-left: 2px solid #90a1b9;">State Cost Share ($M)</th>';
+    groupRow += '<th colspan="5" style="text-align: center; border-left: 2px solid #90a1b9;">Error Rate</th>';
+    groupRow += '<th colspan="2" style="text-align: center; border-left: 2px solid #90a1b9;">2024 SNAP</th>';
 
-    table.append('<thead><tr>' + row_data + '</tr></thead><tbody>');
+    var subRow = thLeft + '(sort)' + '</th>';
+    subRow += '<th style="text-align: right; border-left: 2px solid #90a1b9;">Current</th>';
+    subRow += th + 'Proposed Additional' + '</th>';
+    subRow += th + 'Proposed Total' + '</th>';
+    subRow += '<th style="text-align: right; border-left: 2px solid #90a1b9;">Current</th>';
+    subRow += th + 'Proposed' + '</th>';
+    subRow += th + 'QC Zero' + '</th>';
+    subRow += th + 'QC Threshold' + '</th>';
+    subRow += th + 'Est. Change' + '</th>';
+    subRow += '<th style="text-align: right; border-left: 2px solid #90a1b9;">Households (K)</th>';
+    subRow += th + 'Benefits ($M)' + '</th>';
+
+    table.append('<thead><tr>' + groupRow + '</tr><tr>' + subRow + '</tr></thead><tbody>');
     var states_added = [];
 
     for (var state in data) {
         var json = data[state];
-        var row_data = td + json['State'] + '</td>';
+        var row_data = tdLeft + json['State'] + '</td>';
         if (!states_added.includes(json['State'])){
             states_added.push(json['State']);
-            row_data +=  td + formatNumber(json['Households'], 1000) + '</td>';
-            row_data +=  td + "$" + formatNumber(json['Cost'], 1000000) + '</td>';
-            row_data +=  td + formatErrorRate(json['Actual Error Rates']) + '</td>';
-            row_data +=  td + formatCostShare(json['Actual Cost Share']) + '</td>';
-            row_data +=  td + "$" + formatNumber(json['Actual Cost'], 1000000) + '</td>';
-            row_data +=  td + formatErrorRate(json['QC Threshold Error Rates']) + '</td>';
-            row_data +=  td + formatErrorRate(json['QC Zero Error Rates']) + '</td>';
-            row_data +=  td + parseFloat(json['QC Method Rate Change']).toFixed(2) + '%</td>';
-            row_data +=  td + formatErrorRate(json['New Error Rate']) + '</td>';
-            row_data +=  td + formatCostShare(json['New Cost Share']) + '</td>';
-            row_data +=  td + formatCostShare(json['New Cost Share Change']) + '</td>';
-            row_data +=  td + "$" + formatNumber(json['New Cost'], 1000000) + '</td>';
-            row_data +=  td + "$" + formatNumber(json['New Cost Change'], 1000000) + '</td>';
+            // State Cost Share group
+            row_data += '<td style="text-align: right; border-left: 2px solid #90a1b9;">$' + formatNumber(json['Actual Cost'], 1000000) + '</td>';
+            row_data += td + '$' + formatNumber(json['New Cost Change'], 1000000) + '</td>';
+            row_data += td + '$' + formatNumber(json['New Cost'], 1000000) + '</td>';
+            // Error Rate group
+            row_data += '<td style="text-align: right; border-left: 2px solid #90a1b9;">' + formatErrorRate(json['Actual Error Rates']) + '</td>';
+            row_data += td + formatErrorRate(json['New Error Rate']) + '</td>';
+            row_data += td + parseFloat(json['QC Zero Error Rates']).toFixed(1) + '%</td>';
+            row_data += td + parseFloat(json['QC Threshold Error Rates']).toFixed(1) + '%</td>';
+            row_data += td + formatEstChange(json['QC Method Rate Change']) + '</td>';
+            // Standalone columns
+            row_data += '<td style="text-align: right; border-left: 2px solid #90a1b9;">' + formatNumber(json['Households'], 1000) + '</td>';
+            row_data += td + '$' + formatNumber(json['Cost'], 1000000) + '</td>';
             table.append('<tr>' + row_data + '</tr>');
 
             map_dataH[json['State']] = convertK(json['Households']);
@@ -180,7 +193,13 @@
     }
 
     $('#table-placeholder').append(table);    
-    $('#snap-table').DataTable({ scrollX: false, paging: false, searching: false, fixedColumns: { left: 1 } });
+    $('#snap-table').DataTable({
+        scrollX: false,
+        paging: false,
+        searching: false,
+        fixedColumns: { left: 1 },
+        fixedHeader: true
+    });
 
     // Initial View setup
     map_data = map_data44;
@@ -190,30 +209,28 @@
         document.getElementById('map-title').innerText = btnText;
         if (x == 1){
             map_data = map_data1;
-            // SCALE ENFORCED: 0 to 30
-            initMap('', '%', 'black', {type: 'colorLinear', min: 0, max: 30});
+            initMap('', '%', 'black', {min: 0, max: 30});
         } else if (x == 2){
             map_data = map_data2;
-            initMap('', '%', 'black', 'colorLogarithmic');
+            initMap('', '%', 'black', {});
         } else if (x == 3){
             map_data = map_data3;
-            initMap('$', 'M', 'black', 'colorLogarithmic');
+            initMap('$', 'M', 'black', {});
         } else if (x == "H"){
             map_data = map_dataH;
-            initMap('', 'K', 'black', 'colorLogarithmic');
+            initMap('', 'K', 'black', {});
         } else if (x == "B"){
             map_data = map_dataB;
-            initMap('$', 'M', 'black', 'colorLogarithmic');
+            initMap('$', 'M', 'black', {});
         } else if (x == 41){
             map_data = map_data41;
-            // SCALE ENFORCED: 0 to 30
-            initMap('', '%', 'black', {type: 'colorLinear', min: 0, max: 30});
+            initMap('', '%', 'black', {min: 0, max: 30});
         } else if (x == 42){
             map_data = map_data42;
-            initMap('', '%', 'black', 'colorLogarithmic');
+            initMap('', '%', 'black', {});
         } else if (x == 44){
             map_data = map_data44;
-            initMap('$', 'M', 'black', 'colorLogarithmic');
+            initMap('$', 'M', 'black', {});
         };
     };
 </script>
@@ -221,5 +238,16 @@
 <style>
     * { font-family: system-ui, -apple-system, sans-serif; }
     .sorting_asc.dtfc-fixed-left, .sorting_desc.dtfc-fixed-left { position: relative !important; }
+    #snap-table thead tr:first-child th {
+        background: #314158;
+        color: #ffffff;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 1px solid #90a1b9;
+    }
+    #snap-table thead tr:nth-child(2) th {
+        background: #eef1f5;
+        font-size: 0.85rem;
+    }
 </style>
 </html>
