@@ -4,11 +4,9 @@ var map_dataB = [];
 var map_data1 = [];
 var map_data2 = [];
 var map_data3 = [];
-
 var map_data11 = [];
 var map_data21 = [];
 var map_data31 = [];
-
 var map_data41 = [];
 var map_data42 = [];
 var map_data43 = [];
@@ -19,20 +17,30 @@ var chart;
 var statesMap;
 var nation;
 
+// Register the data labels plugin
 Chart.register(window.ChartDataLabels);
 
-function initMap(f_before, f_after, t_color, c_scale){
-      // Relative path for GitHub Pages
-      fetch('libs/states-10m.json').then((r) => r.json()).then((us) => {
+function initMap(f_before, f_after, t_color, c_scale_input){
+    fetch('libs/states-10m.json').then((r) => r.json()).then((us) => {
 
-        if (c_scale == null){
-            c_scale = {
-                quantize: 10,
-                type: 'colorLogarithmic',
-            }
-        }else{
-            c_scale = {}
+        // SCALE CONFIGURATION
+        // IMPORTANT: Do NOT set 'type' on the color scale.
+        // chartjs-chart-geo auto-detects the scale type from the 'color' key name.
+        // Setting type: 'colorLinear' or 'colorLogarithmic' replaces the registered
+        // scale with an unknown string, silently breaking the map entirely.
+        // min/max are inherited from Chart.js LinearScale and work correctly here.
+        let scaleConfig = {
+            axis: 'x',
+            interpolate: 'blues'
         };
+
+        if (c_scale_input && typeof c_scale_input === 'object') {
+            // Strip 'type' from any passed object to avoid breaking the scale
+            const { type, ...rest } = c_scale_input;
+            Object.assign(scaleConfig, rest);
+        }
+        // String inputs (e.g. 'colorLogarithmic') are intentionally ignored —
+        // the scale auto-detects as linear, which is safe for all current maps.
 
         nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
         statesMap = ChartGeo.topojson.feature(us, us.objects.states).features;
@@ -45,8 +53,8 @@ function initMap(f_before, f_after, t_color, c_scale){
         chart = new Chart(document.getElementById("canvas").getContext("2d"), {
             type: 'choropleth',
             data: {
-            labels: statesMap.map((d) => d.properties.name),
-            datasets: [{
+                labels: statesMap.map((d) => d.properties.name),
+                datasets: [{
                     label: 'States',
                     outline: nation,
                     data: statesMap.map((d) => ({feature: d, value: map_data[d.properties.name]})),
@@ -56,17 +64,13 @@ function initMap(f_before, f_after, t_color, c_scale){
             },
             options: {
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
                                 const rawValue = map_data[context.raw.feature.properties.name];
-                                // FORCE NUMBER AND ADD COMMAS
                                 if (rawValue !== undefined && rawValue !== null) {
-                                    const formattedValue = Number(rawValue).toLocaleString('en-US');
-                                    return context.raw.feature.properties.name + ": " + f_before + formattedValue + f_after;
+                                    return context.raw.feature.properties.name + ": " + f_before + Number(rawValue).toLocaleString('en-US') + f_after;
                                 }
                                 return '';
                             }
@@ -75,35 +79,23 @@ function initMap(f_before, f_after, t_color, c_scale){
                     datalabels: {
                         align: 'center',
                         color: t_color,
-                        backgroundColor: null,
                         formatter: function (value) {
                             const stateName = value.feature.properties.name;
-                            const rawValue = map_data[stateName];
-                            
-                            if (stateName == 'Virgin Islands' || stateName == 'Guam'){
-                                return '';
+                            const rawVal = map_data[stateName];
+                            if (stateName == 'Virgin Islands' || stateName == 'Guam') return '';
+                            if (rawVal !== undefined && rawVal !== null && rawVal >= 0) {
+                                return f_before + Number(rawVal).toLocaleString('en-US') + f_after;
                             }
-                            else if (rawValue !== undefined && rawValue !== null && rawValue >= 0){
-                                // FORCE NUMBER AND ADD COMMAS
-                                const formattedValue = Number(rawValue).toLocaleString('en-US');
-                                return f_before + formattedValue + f_after;
-                            }else{
-                                return '';
-                            };
+                            return '';
                         },
-                        font: {
-                            weight: 'normal',
-                            size: 13,
-                        }
+                        font: { weight: 'normal', size: 13 }
                     },
                 },
                 scales: {
-                    xy: {
-                        projection: 'albersUsa',
-                    },
-                    color: c_scale
+                    xy: { projection: 'albersUsa' },
+                    color: scaleConfig
                 },
             }
         });
-    });
+    }).catch(err => console.error("Map Load Error:", err));
 };
